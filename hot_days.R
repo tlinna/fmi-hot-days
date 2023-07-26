@@ -5,8 +5,10 @@ library(ggdark)
 # if computed and saved already:
 # read_rds("annual_hot_days.rds")
 
-# Read and summarise data ####
+# Read and summarise data ----------------------------------------
+
 # Uses around 18 gigabytes of memory
+# Download Tmax data into Tmax folder from https://en.ilmatieteenlaitos.fi/gridded-observations-on-aws-s3
 
 years <- 1961:2022
 number_of_hot_days <- rep(0, length(years))
@@ -24,7 +26,7 @@ for (year in years) {
   annual_hot_days$hot_days[annual_hot_days$year == year] <- annual_data[[1]]
 }
 
-# download official FMI stats from https://www.ilmatieteenlaitos.fi/helletilastot
+# download official FMI stats CSV from https://www.ilmatieteenlaitos.fi/helletilastot
 official_hot_days <- read_delim("koko-maan-hellepivt-1961.csv", 
                                 delim = ";", escape_double = FALSE, trim_ws = TRUE) %>%
   rename(year = Category)
@@ -35,12 +37,12 @@ annual_hot_days <- annual_hot_days %>% mutate(difference = hot_days - official_n
 
 write_rds(annual_hot_days, file = "annual_hot_days.rds")
 
-# Linear fit ####
+# Linear fit ---------------------------------------
 
 fit <- lm(difference ~ year, data = annual_hot_days)
 summary(fit)
 
-# Plotting ####
+# Plotting ----------------------------------------
 
 ggplot(annual_hot_days, aes(x = year, y = hot_days)) +
   geom_col(fill = "pink") +
@@ -63,7 +65,7 @@ ggsave("Hellepäivät.png", width = 5, height = 5, dpi = 600)
 
 ggplot(annual_hot_days, aes(x = year, y = difference)) +
   geom_col(fill = "pink") +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm", color = "skyblue", fill = "darkgray", se = T) +
   labs(title = "Hellepäivien määrän ero",
        subtitle = "ClimGrid vs. virallinen tilasto",
        x = "Vuosi",
