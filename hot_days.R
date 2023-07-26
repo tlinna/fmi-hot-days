@@ -67,8 +67,7 @@ ggplot(annual_hot_days, aes(x = year, y = hot_days)) +
   scale_y_continuous(breaks = seq(0,100,5),
                      minor_breaks = seq(0,100,1),
                      limits = c(0, 75),
-                     expand = c(0,0)
-                     ) +
+                     expand = c(0,0)) +
   scale_x_continuous(breaks = seq(1960,2030,10)) +
   dark_theme_light()
 
@@ -82,8 +81,7 @@ ggplot(annual_hot_days, aes(x = year, y = difference)) +
        x = "Vuosi",
        y = "Erotus (ClimGrid - virallinen tilasto)") +
   scale_x_continuous(breaks = seq(1960,2030,10)) +
-  scale_y_continuous(breaks = seq(-10, 10, 2),
-                     minor_breaks = seq(-10, 10, 1)) +
+  scale_y_continuous(breaks = seq(-10, 10, 1)) +
   dark_theme_light()
 
 ggsave("Hellepäivät erotus.png", width = 5, height = 5, dpi = 600)
