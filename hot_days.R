@@ -60,7 +60,7 @@ ggplot(annual_hot_days, aes(x = year, y = hot_days)) +
   geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs", k = 5, sp = 20),
               color = "skyblue", fill = "darkgray", se = T) +
   labs(title = "Hellepäivien määrä Suomessa vuosittain",
-       subtitle = "Data: Ilmatieteen laitos, ClimGrid 1km x 1km",
+       subtitle = "Data: Ilmatieteen laitos, ClimGrid 1km x 1km Tmax",
        x = "Vuosi",
        y = "Hellepäivien lukumäärä",
        caption = "@TLinnaluoto") +
