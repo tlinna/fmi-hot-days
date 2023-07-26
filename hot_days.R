@@ -6,6 +6,7 @@ library(ggdark)
 # read_rds("annual_hot_days.rds")
 
 # Read and summarise data ####
+# Uses around 18 gigabytes of memory
 
 years <- 1961:2022
 number_of_hot_days <- rep(0, length(years))
@@ -23,6 +24,7 @@ for (year in years) {
   annual_hot_days$hot_days[annual_hot_days$year == year] <- annual_data[[1]]
 }
 
+# download official FMI stats from https://www.ilmatieteenlaitos.fi/helletilastot
 official_hot_days <- read_delim("koko-maan-hellepivt-1961.csv", 
                                 delim = ";", escape_double = FALSE, trim_ws = TRUE) %>%
   rename(year = Category)
@@ -36,7 +38,6 @@ write_rds(annual_hot_days, file = "annual_hot_days.rds")
 # Linear fit ####
 
 fit <- lm(difference ~ year, data = annual_hot_days)
-fit2 <- lm(difference ~ year, data = filter(annual_hot_days, year >= 1964))
 summary(fit)
 
 # Plotting ####
