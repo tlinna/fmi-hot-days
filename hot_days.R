@@ -7,14 +7,21 @@ library(ggdark)
 
 # Read and summarise data ----------------------------------------
 
-# Uses around 18 gigabytes of memory
-# Download Tmax data into Tmax folder from https://en.ilmatieteenlaitos.fi/gridded-observations-on-aws-s3
-
 years <- 1961:2022
 number_of_hot_days <- rep(0, length(years))
 annual_hot_days <- tibble(year = years,
                           hot_days = number_of_hot_days)
 
+# Download Tmax data from https://en.ilmatieteenlaitos.fi/gridded-observations-on-aws-s3
+# About 1 GB per year
+
+for (year in years) {
+  download.file(url = paste0("https://fmi-gridded-obs-daily-1km.s3-eu-west-1.amazonaws.com/Netcdf/Tmax/tmax_", year, ".nc"),
+                destfile = paste0("Tmax/tmax_", year, ".nc"))
+}
+
+
+# Uses around 18 gigabytes of memory
 for (year in years) {
   filename <- paste0("Tmax/tmax_", year, ".nc")
   annual_data <- tidync(filename) %>% 
@@ -36,6 +43,8 @@ annual_hot_days$official_number <- official_hot_days$sum
 annual_hot_days <- annual_hot_days %>% mutate(difference = hot_days - official_number)
 
 write_rds(annual_hot_days, file = "annual_hot_days.rds")
+
+remove(filename, number_of_hot_days, year, years, annual_data) # remove unnecessary objects from env
 
 # Linear fit ---------------------------------------
 
