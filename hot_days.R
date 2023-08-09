@@ -30,7 +30,7 @@ for (year in years) {
     hyper_tibble(force = T) %>% 
     group_by(Time) %>%
     summarise(Temp = max(Tmax)) %>% 
-    filter(Temp > 25) %>% 
+    filter(Temp >= 25.1) %>% 
     count()
   annual_hot_days$hot_days[annual_hot_days$year == year] <- annual_data[[1]]
 }
